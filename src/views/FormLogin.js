@@ -6,7 +6,7 @@ import { API_ENDPOINT } from "../config";
 export default props => {
     [valorLogin, setValorLogin] = useState("");
     [valorSenha, setValorSenha] = useState("");
-    const{state, dispatch} = useContext();
+    const {dispatch} = useContext(UserContext);
     const [dados, setDados] = useState([])
 
     const buscaLogin = async () => { 
@@ -14,8 +14,9 @@ export default props => {
         const URL = API_ENDPOINT + 'Colaboradores/BuscaLogin/';
         
         const dadosEnvio = {
-            crendecial: dados.credencial,
-            senha: dados.senha
+            idCol: dados.idCol,
+            crendecial: dados.valorLogin,
+            senha: dados.valorSenha
         }
 
         const options = {
@@ -34,8 +35,7 @@ export default props => {
                 if(!response.ok){
                     throw new Error('A solicitação falhou')
                 }
-                const data = response.json();
-                return data;
+                return response.json();
             }
         ).then(
             (dadosEnvio) =>{

@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 export default App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AdmMenu">
+      <Stack.Navigator initialRouteName="FormLogin">
       <Stack.Screen
         name="FormLogin"
         component={FormLogin}
