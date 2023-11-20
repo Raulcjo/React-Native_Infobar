@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Front-infobar",
+    "slug": "Front-infobar",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
