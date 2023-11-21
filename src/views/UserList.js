@@ -1,175 +1,152 @@
-import React, { useEffect } from 'react'
-import { View, Text, FlatList, Alert, RefreshControl } from 'react-native'
-import { ListItem, Icon } from 'react-native-elements'
-import { StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, Alert, RefreshControl } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { StyleSheet, Text } from 'react-native';
 
-import { useContext, useState  } from 'react'
-import UserContext from '../context/UserContext'
-import { API_ENDPOINT } from '../config'
+import { useContext } from 'react';
+import UserContext from '../context/UserContext';
+import { API_ENDPOINT } from '../config';
 
-export default props => {
+export default (props) => {
+  const { state, dispatch } = useContext(UserContext);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [dados, setDados] = useState([]);
 
-    const{state, dispatch} = useContext(UserContext)
-    const [isRefreshing, setIsRefreshing] = useState(false);
+  const getUsers = () => {
+    const URL = API_ENDPOINT + 'Colaboradores/';
 
-    const [dados, setDados] = useState([])
+    const options = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
 
-    const getUsers = () => {
-        const URL = API_ENDPOINT + 'Colaboradores/';
-
-        const options ={
-            headers: {
-                Accept: 'application/json',
-                'Content-Type' : 'application/json',
-            }
-        };
-
-        fetch(URL, options)
-        .then(
-            (response) => {
-                if(!response.ok){
-                    throw new Error('A solicitação falhou')
-                }
-                return response.json();
-            }
-        ).then(
-            (dadosEnvio) =>{
-                console.log('Resposta do servidor: ', dadosEnvio)
-                setDados(dadosEnvio)
-                //navigation.push('UserList')
-            }
-        ).catch(
-            (error) =>{
-                console.error(error)
-            }
-        )
-    }
-
-    useEffect(()=>{
-        getUsers()
-    },
-    []
-    )
-
-    const deleteApi = async (user) =>{
-        const URL = API_ENDPOINT + 'Colaboradores/DeleteCol/' + user.idCol
-
-        const options = {
-            method: 'DELETE'
-
+    fetch(URL, options)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('A solicitação falhou');
         }
-        console.log("ERROR!!!!FETCH!!!", user.idCol)
+        return response.json();
+      })
+      .then((dadosEnvio) => {
+        console.log('Resposta do servidor: ', dadosEnvio);
+        setDados(dadosEnvio);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-        fetch(URL, options)
-            .then(response => {
-                
-                if(!response.ok){
-                    throw new Error('Erro na solicitação HTTP')
-                }
-               return response;
-            })
-            .then(responseData => {
-                
-                Alert.alert(
-                    'Exclusão!',
-                    'Usuário excluído com sucesso!',
-                    [
-                        {
-                            text: 'Ok',
-                            
-                            //onPress: () => props.navigation.push('UserList')
-                        }
-                    ]
-                   
-                )
-                getUsers();
-            })
-            .catch(error => {
-                console.error('Erro: ', error)
-            })
-    }
-    
+  useEffect(() => {
+    getUsers();
+  }, []);
 
+  const deleteApi = async (user) => {
+    const URL = API_ENDPOINT + 'Colaboradores/DeleteCol/' + user.idCol;
 
-    function deletarUser(user) {
-        Alert.alert ('Excluir Usuário', 'Deseja excluir o colaborador ? ', [
-            {
-                text: "Sim",
-                onPress(){
-                    deleteApi(user)
-                }
-            },
-            {
-                text:"Não"
-            }
-        ]
-        )
-    }
+    const options = {
+      method: 'DELETE',
+    };
 
-
-    const getUserItem = ({ item: user, navigation }) => {
-        return (
-            <ListItem
-            bottomDivider
-            onPress={() => props.navigation.navigate("UserOrders", { userId: user.idCol })}
-          >
-            <ListItem.Content>
-              <ListItem.Title>{user.nome}</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Chevron
-              name="edit"
-              color="orange"
-              size={25}
-              onPress={() => props.navigation.navigate("UserForm", { user })}
-            />
-            <ListItem.Chevron
-              name="delete"
-              color="red"
-              size={25}
-              onPress={() => deletarUser(user)}
-            />
-          </ListItem>
-        );
-
-    }
-    const atualiza = ()=>{
-        setIsRefreshing(true)
-        //props.navigation.push("UserList")
+    fetch(URL, options)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Erro na solicitação HTTP');
+        }
+        return response;
+      })
+      .then((responseData) => {
+        Alert.alert('Exclusão!', 'Usuário excluído com sucesso!', [
+          {
+            text: 'Ok',
+          },
+        ]);
         getUsers();
-        setIsRefreshing(false)
-    }
+      })
+      .catch((error) => {
+        console.error('Erro: ', error);
+      });
+  };
 
-    return(
-        <View>
-            <FlatList 
-                data={dados}
-                keyExtractor={ user => user.idCol}
-                renderItem={getUserItem}
-                refreshControl={
-                    <RefreshControl
-                        onRefresh={atualiza}
-                        refreshing={isRefreshing}
-                    />
-                }
-            />
-        </View>
-    )
+  function deletarUser(user) {
+    Alert.alert('Excluir Usuário', 'Deseja excluir o colaborador? ', [
+      {
+        text: 'Sim',
+        onPress() {
+          deleteApi(user);
+        },
+      },
+      {
+        text: 'Não',
+      },
+    ]);
+  }
 
+  const getUserItem = ({ item: user }) => {
+    return (
+      <ListItem
+        bottomDivider
+        containerStyle={styles.listItemContainer}
+        onPress={() => {
+          if (user.pedidos && user.pedidos.length > 0) {
+            props.navigation.navigate('UserOrders', { userId: user.idCol });
+          } else {
+            Alert.alert('Sem Pedidos', 'Usuário não possui nenhum pedido.');
+          }
+        }}
+      >
+        <ListItem.Content>
+          <ListItem.Title style={styles.titulo}>{user.nome}</ListItem.Title>
+        </ListItem.Content>
+        <ListItem.Chevron
+          name="edit"
+          color="orange"
+          size={25}
+          onPress={() => props.navigation.navigate('UserForm', { user })}
+        />
+        <ListItem.Chevron
+          name="delete"
+          color="red"
+          size={25}
+          onPress={() => deletarUser(user)}
+        />
+      </ListItem>
+    );
+  };
 
+  const atualiza = () => {
+    setIsRefreshing(true);
+    getUsers();
+    setIsRefreshing(false);
+  };
 
-   
-}
-
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={dados}
+        keyExtractor={(user) => user.idCol}
+        renderItem={getUserItem}
+        refreshControl={
+          <RefreshControl onRefresh={atualiza} refreshing={isRefreshing} />
+        }
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    titulo:{
-        fontSize: 25,
-        fontWeight: 'bold'
-    },
-    subt:{
-        fontSize: 25
-    }
-
-}
-
-)
+  container: {
+    flex: 1,
+    backgroundColor: '#192B4C',
+  },
+  listItemContainer: {
+    backgroundColor: 'white',
+    borderBottomColor: '#3498db',
+    borderBottomWidth: 1,
+  },
+  titulo: {
+    fontSize: 20,
+    color: '#192B4C',
+  },
+});

@@ -28,6 +28,7 @@
 
 # React Native Elements
 - npm install @rneui/themed @rneui/base
+- npm install react-native-elements
 
 # React Hook Form
 - npm install react-hook-form

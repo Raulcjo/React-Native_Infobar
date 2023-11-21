@@ -15,15 +15,26 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const UserStackNavigator = ({ navigation }) => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#192B4C', // Cor de fundo do header
+      },
+      headerTintColor: '#FFFFFF', // Cor do texto do header
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
     <Stack.Screen
       name="UserList"
       component={UserList}
       options={() => ({
         title: 'Lista de Colaboradores',
         headerRight: () => (
-          <Icon
+          icon=<Icon
             name="add"  
+            color='white'
             onPress={() => {
               navigation.navigate('UserForm');
               console.log('Botão de adição pressionado!');
@@ -53,7 +64,7 @@ const UserStackNavigator = ({ navigation }) => (
           <Button
             onPress={() => navigation.navigate("ProductsForm")}
             type='clear'
-            icon={<Icon name="add" size={25} color="blue" />}
+            icon={<Icon name="add" size={25} color="white" />}
           />
         ),
       })}
@@ -62,15 +73,26 @@ const UserStackNavigator = ({ navigation }) => (
 );
 
 const ProdutoStackNavigator = ({ navigation }) => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#192B4C', // Cor de fundo do header
+      },
+      headerTintColor: '#FFFFFF', // Cor do texto do header
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
     <Stack.Screen
       name="ProductsList"
       component={ProductsList}
       options={() => ({
         title: 'Lista de Produtos',
         headerRight: () => (
-          <Icon
-            name="add"  
+         icon= <Icon
+            name="add"
+            color="white"  
             onPress={() => {
               navigation.navigate('ProductsForm');
               console.log('Botão de adição pressionado!');
@@ -90,15 +112,36 @@ const ProdutoStackNavigator = ({ navigation }) => (
 );
 
 const OrdersStackNavigation = ({ navigation }) => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#192B4C', // Cor de fundo do header
+      },
+      headerTintColor: '#FFFFFF', // Cor do texto do header
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
     
   </Stack.Navigator>
 )
 
-
 const AdministradorMenu = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#192B4C', // Cor do ícone ativo
+        inactiveTintColor: 'gray', // Cor do ícone inativo
+        style: {
+          backgroundColor: '#FFFFFF', // Cor de fundo da barra de navegação
+        },
+        labelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+        },
+      }}
+    >
       <Tab.Screen
         name="Colaboradores"
         component={UserStackNavigator}
@@ -125,4 +168,4 @@ const AdministradorMenu = () => {
   );
 };
 
-export default AdministradorMenu;  
+export default AdministradorMenu;

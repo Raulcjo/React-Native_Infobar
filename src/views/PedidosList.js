@@ -140,7 +140,7 @@ export default props => {
     }
 
     return(
-        <View>
+        <View style={style.container}>
             <FlatList 
                 data={dados}
                 keyExtractor={ produto => produto.idProd}
@@ -156,7 +156,11 @@ export default props => {
     )
 }
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#192B4C',
+      },
     titulo:{
         fontSize: 25,
         fontWeight: 'bold'

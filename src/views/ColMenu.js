@@ -1,15 +1,27 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Button, Icon } from '@rneui/base';
 
 import PedidosList from './PedidosList';
 import CodBarras from './CodBarras';
 
-const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const CodBarrasStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#192B4C',
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
     <Stack.Screen
       name="Scanner"
       component={CodBarras}
@@ -19,7 +31,17 @@ const CodBarrasStackNavigator = () => (
 );
 
 const PedidosStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#192B4C',
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
     <Stack.Screen
       name="PedidosList"
       component={PedidosList}
@@ -30,16 +52,60 @@ const PedidosStackNavigator = () => (
 
 const ColaboradorMenu = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: "#192B4C",
+        inactiveTintColor: '#bdc3c7',
+        style: {
+          backgroundColor: '#2c3e50',
+        },
+        labelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+        },
+      }}
+    >
       <Tab.Screen
         name="Pedidos"
         component={PedidosStackNavigator}
-        options={{ headerShown: false }}
+        options={({ navigation }) => ({
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="user-alt" size={size} color={color} />
+          ),
+          headerRight: () => (
+            <Icon
+              name="add"
+              color="white"
+              onPress={() => {
+                navigation.navigate('UserForm');
+                console.log('Botão de adição pressionado!');
+              }}
+              containerStyle={{ marginRight: 10 }}
+            />
+          ),
+        })}
       />
       <Tab.Screen
         name="Scanner"
         component={CodBarrasStackNavigator}
-        options={{ headerShown: false }}
+        options={({ navigation }) => ({
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="wine-bottle" size={size} color={color} />
+          ),
+          headerRight: () => (
+            <Icon
+              name="add"
+              color="white"
+              onPress={() => {
+                navigation.navigate('ProductsForm');
+                console.log('Botão de adição pressionado!');
+              }}
+              containerStyle={{ marginRight: 10 }}
+            />
+          ),
+        })}
       />
     </Tab.Navigator>
   );
