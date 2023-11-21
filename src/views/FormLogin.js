@@ -1,5 +1,6 @@
 import { TouchableOpacity, Image, Text, TextInput, View, KeyboardAvoidingView, StyleSheet, Alert } from "react-native"
-import { useContext, useState, useEffect, useNavigation } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import UserContext from "../context/UserContext";
 import { API_ENDPOINT } from "../config";
 
@@ -7,8 +8,9 @@ export default props => {
   const [valorLogin, setValorLogin] = useState("");
   const [valorSenha, setValorSenha] = useState("");
   const { state, dispatch } = useContext(UserContext);
+  const navigation = useNavigation();
 
-  const buscaLogin = async () => {
+  const buscaLogin = async (props) => {
     const URL = API_ENDPOINT + 'Colaboradores/BuscaLogin/';
 
     const dadosEnvio = {
@@ -30,7 +32,15 @@ export default props => {
 
       if (response.ok) {
         console.log("Você fez login com sucesso");
-        //props.navigation.push("AdministradorMenu");
+
+        //const idCol = data.id;
+        //console.log(idCol);
+        if(valorLogin == 'Gian' && valorSenha == 'Gian'){
+          navigation.navigate("AdmMenu");
+        }
+        else{
+          navigation.navigate("ColMenu");//, {idCol}
+        }
       } else {
         Alert.alert('Erro', data.message || 'Falha no login.');
       }

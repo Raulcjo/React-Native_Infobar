@@ -10,6 +10,7 @@ import CodBarras from './CodBarras';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
 const CodBarrasStackNavigator = () => (
   <Stack.Navigator
     screenOptions={{
@@ -23,7 +24,7 @@ const CodBarrasStackNavigator = () => (
     }}
   >
     <Stack.Screen
-      name="Scanner"
+      name="ScannerPage"
       component={CodBarras}
       options={{ title: 'Realizar Compra' }}
     />
@@ -50,10 +51,12 @@ const PedidosStackNavigator = () => (
   </Stack.Navigator>
 );
 
-const ColaboradorMenu = () => {
+const ColaboradorMenu = ({route}) => {
+  //const { idCol } = route.params;
+  //console.log(idCol);
   return (
     <Tab.Navigator
-      tabBarOptions={{
+      screenOptions={{
         activeTintColor: "#192B4C",
         inactiveTintColor: '#bdc3c7',
         style: {

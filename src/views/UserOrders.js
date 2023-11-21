@@ -11,7 +11,7 @@ function UserOrdersScreen({ route }) {
   const [orders, setOrders] = useState([]);
 
   const getOrders = () => {
-    const URL = API_ENDPOINT + `Colaboradores/ViewCol` + idCol;
+    const URL = API_ENDPOINT + `Colaboradores/ViewCol` + userId;
 
     fetch(URL)
       .then((response) => {

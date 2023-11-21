@@ -9,7 +9,12 @@ export default ({ route, navigation }) => {
   const { dispatch } = useContext(UserContext);
 
   const fazerPost = () => {
-    const URL = API_ENDPOINT + 'Colaboradores/AddColaborador/';
+    if(user.idCol == idCol){
+      const URL = API_ENDPOINT + 'Colaboradores/EditColaborador/' + user.idCol;
+    }else{
+      const URL = API_ENDPOINT + 'Colaboradores/AddColaborador/';
+    }
+    
 
     const dadosEnvio = {
       IdCol: user.idCol,
